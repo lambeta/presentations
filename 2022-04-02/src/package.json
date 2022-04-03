@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build --base /presentations/2022/webassembly-spec/ --out ../../dist/2022/webassembly-spec" ,
+    "export": "slidev export --dark --output ../2022-04-03-webassembly-spec.pdf"
+  }
+}
