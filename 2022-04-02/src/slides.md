@@ -48,7 +48,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 
 # WebAssembly
 
-Definition, [learn more](https://webassembly.github.io/spec/core/intro/index.html)
+[learn more](https://webassembly.github.io/spec/core/intro/index.html)
 
 > WebAssembly (abbreviated Wasm) is a binary instruction format for a stack-based virtual machine. Wasm is designed as a portable compilation target for programming languages, enabling deployment on the web for client and server applications.
 
@@ -89,18 +89,21 @@ modules
 
 # Javascript interface
 
-```js
+```js {all|10-13|16|18|20|all}
+// demo.wasm
 (module
     (import "js" "import1" (func $i1))
     (import "js" "import2" (func $i2))
     (func $main (call $i1))
     (start $main)
     (func (export "f") (call $i2))
-) // demo.wasm
+) 
+
 var importObj = {js: {
     import1: () => console.log("hello,"),
     import2: () => console.log("world!")
 }};
+
 fetch('demo.wasm').then(response =>
     response.arrayBuffer()
 ).then(buffer =>
@@ -114,6 +117,7 @@ fetch('demo.wasm').then(response =>
 
 # Web api
 定义了编译、序列化和指令的引用方式
+
 ```js
 // 编译方式
 partial namespace WebAssembly {
@@ -137,13 +141,30 @@ ${url}:wasm-function[${funcIndex}]:${pcOffset}
 ---
 
 # Compilers
+
 从 X 编译到 WASM
 
-- C/C++ - [Emscripten](https://en.wikipedia.org/wiki/Emscripten)
+- C/C++[^1]
 - Rust
 - .Net
 - Java
 - Ruby
+
+<arrow v-click="1" x1="230" y1="150" x2="150" y2="150" color="#564" width="3" arrowSize="1" />
+
+[^1]: [Emscripten](https://en.wikipedia.org/wiki/Emscripten)
+
+<style>
+.footnotes-sep {
+  @apply mt-20 opacity-10;
+}
+.footnotes {
+  @apply text-sm opacity-75;
+}
+.footnote-backref {
+  display: none;
+}
+</style>
 
 ---
 
@@ -160,3 +181,106 @@ ${url}:wasm-function[${funcIndex}]:${pcOffset}
 - Unreal Engine 3
 - SQLite
 - AutoCAD
+
+---
+layout: center
+class: text-center
+---
+
+# Problems wasm solve?
+
+Native Speed 
+
+---
+
+# Performance
+Wasm is statically typed
+
+- Javascript 是解释性语言，每一行代码需要解析
+- Javascript JIT 需要花时间监控热点代码，并且可能返工
+
+---
+
+# Faster startup times
+Wasm is compiled & optimized binary format
+
+- Binary bytecode 减少了文件大小，易于传输和下载
+- 快速通过模块验证、文件结构的不同部分可以并行编译
+- AOT compilation
+- Streaming compilation（边下载边编译）
+
+---
+
+# Multiple languages
+Less is more
+
+- Compiler target
+- Code reuse
+
+---
+layout: center
+class: text-center
+---
+
+# How does it work?
+
+.wasm -> browser
+
+---
+
+# Procedure
+1. Loading (JS function call)
+2. Compiling (Validation)
+3. Instantiating a module (Passed to web worker, returns module instance)
+
+---
+
+# Secure
+
+- Sandboxed inside Javascript VM
+- RE pass ArrayBuffer as linear memory
+- No Pointers (Wasm framework access item by index)
+
+---
+
+# Languages can be used to create WASM module
+[awesome wasm languages](https://github.com/appcypher/awesome-wasm-langs)
+
+- C/C++
+- Rust
+- AssemblyScript (a new compiler for TypeScript)
+- Java (TeaVM generate WASM)
+- Go 1.11 includes a GC WASM module
+- Python (Pyodide)
+- C# (Blazor)
+
+---
+
+# Runtime environment
+
+- Desktop browser: Chrome, Edge, Firefox, Opera and Safari
+- Mobile browser: Chrome, Firefox for Android, Safari for iOS
+- Node.js from V8
+- Cross-platform WASI[^1]
+
+[^1]: [WebAssembly Standard Interface](https://github.com/wasmerio/awesome-wasi)
+
+<style>
+.footnotes-sep {
+  @apply mt-20 opacity-10;
+}
+.footnotes {
+  @apply text-sm opacity-75;
+}
+.footnote-backref {
+  display: none;
+}
+</style>
+
+---
+layout: center
+class: text-center
+---
+
+# Learn More
+[Webassembly quick guide](https://www.tutorialspoint.com/webassembly/webassembly_quick_guide.htm)
