@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "rimraf dist && pnpm -r run build"
+    "build": "rimraf dist && pnpm -r run build",
     "serve": "cd dist && mkdir presentations && mv 202*/ presentations/ && http-server"
   },
   "devDependencies": {
