@@ -2,8 +2,8 @@
   "private": true,
   "packageManager": "pnpm@12.16.1",
   "scripts": {
-    "build": "rimraf dist && pnpm -r run build",
-    "serve": "cd dist && mkdir presentations && mv 202*/ presentations/ && http-server"
+    "build": "rimraf dist && pnpm -r run build && cp site/index.html dist/index.html",
+    "serve": "cd dist && mkdir -p presentations && cp index.html presentations/ && mv 202*/ presentations/ && http-server"
   },
   "devDependencies": {
     "@slidev/cli": "^53.0.0",
