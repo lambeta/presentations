@@ -4,16 +4,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          node-version: '14'
+          version: 12.16.1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npx pnpm i --store=node_modules/.pnpm-store
+        run: pnpm install --frozen-lockfile
       - name: Build
-        run: npx pnpm run build
+        run: pnpm run build
       - name: Deploy pages
-        uses: crazy-max/ghaction-github-pages@v2
+        # Only publish from main: PR builds are verified without deploying.
+        if: github.ref == 'refs/heads/main'
+        uses: crazy-max/ghaction-github-pages@v5
         with:
           build_dir: dist
         env:
