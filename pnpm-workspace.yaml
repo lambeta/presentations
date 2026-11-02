@@ -1,2 +1,6 @@
 packages:
   - "*/src"
+
+allowBuilds:
+  playwright-chromium: true
+  pnpm: true
