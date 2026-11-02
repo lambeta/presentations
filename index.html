@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Presentation slides by lambeta, built with Slidev." />
+    <title>Presentations</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #101014;
+        --panel: #18181f;
+        --panel-hover: #1f1f29;
+        --border: #2b2b37;
+        --text: #f2f2f5;
+        --muted: #a3a3b2;
+        --accent: #5eead4;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 4rem 1.5rem;
+        background:
+          radial-gradient(circle at 15% 0%, rgba(94, 234, 212, 0.12), transparent 45%),
+          radial-gradient(circle at 85% 100%, rgba(129, 140, 248, 0.14), transparent 45%),
+          var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: 100%;
+        max-width: 52rem;
+        margin: auto 0;
+      }
+
+      .eyebrow {
+        margin: 0 0 0.75rem;
+        color: var(--accent);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.25rem, 6vw, 3.5rem);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+
+      .lead {
+        margin: 0.9rem 0 2.5rem;
+        max-width: 34rem;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .decks {
+        display: grid;
+        gap: 0.9rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .decks a {
+        display: grid;
+        grid-template-columns: 7.5rem 1fr auto;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 1.3rem 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0.9rem;
+        background: var(--panel);
+        color: inherit;
+        text-decoration: none;
+        transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+      }
+
+      .decks a:hover,
+      .decks a:focus-visible {
+        background: var(--panel-hover);
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .decks a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+
+      .date {
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .title {
+        display: block;
+        font-size: 1.15rem;
+        font-weight: 600;
+      }
+
+      .desc {
+        display: block;
+        margin-top: 0.2rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .arrow {
+        color: var(--accent);
+        font-size: 1.25rem;
+      }
+
+      footer {
+        margin-top: 2.5rem;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      @media (max-width: 40rem) {
+        body {
+          padding: 2.5rem 1rem;
+        }
+
+        .decks a {
+          grid-template-columns: 1fr auto;
+          gap: 0.35rem 1rem;
+          padding: 1.1rem 1.2rem;
+        }
+
+        .date {
+          grid-column: 1 / -1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">lambeta/presentations</p>
+      <h1>Presentations</h1>
+      <p class="lead">Slide decks built with <a href="https://sli.dev" style="color: inherit">Slidev</a>, published with GitHub Pages.</p>
+
+      <ul class="decks">
+        <li>
+          <a href="2022/webassembly-spec/">
+            <span class="date">2022-04-02</span>
+            <span>
+              <span class="title">Welcome to WebAssembly</span>
+              <span class="desc">Fundamental slides for developers</span>
+            </span>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="2022/slidevs/">
+            <span class="date">2022-04-03</span>
+            <span>
+              <span class="title">Welcome to Slidev</span>
+              <span class="desc">Presentation slides for developers</span>
+            </span>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="2022/golang-tutorials/">
+            <span class="date">2022-04-09</span>
+            <span>
+              <span class="title">Welcome to Golang</span>
+              <span class="desc">Golang slides for developers</span>
+            </span>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      </ul>
+
+      <footer>
+        Source: <a href="https://github.com/lambeta/presentations">github.com/lambeta/presentations</a>
+      </footer>
+    </main>
+  </body>
+</html>

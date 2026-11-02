@@ -1,0 +1,1 @@
+export{c as createInfoServices}from"./chunk-II7VFZ6N-CVUXpB-q.js";
