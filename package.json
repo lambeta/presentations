@@ -2,7 +2,7 @@
   "private": true,
   "packageManager": "pnpm@12.16.1",
   "scripts": {
-    "build": "rimraf dist && pnpm -r run build && cp site/index.html dist/index.html",
+    "build": "rimraf dist && pnpm -r run build && cp -R site/. dist/",
     "serve": "cd dist && mkdir -p presentations && cp index.html presentations/ && mv 202*/ presentations/ && http-server"
   },
   "devDependencies": {

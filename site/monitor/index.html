@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="实时监控 Vercel 应用与 Supabase 服务的运行状态，支持自动刷新与启停。"
+    />
+    <title>运行状态 · Presentations</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="topbar">
+      <div class="brand">
+        <a class="back" href="../" aria-label="返回 Presentations 首页">&larr;</a>
+        <span class="brand-text">
+          <span class="brand-eyebrow">Presentations</span>
+          <span class="brand-title">运行状态</span>
+        </span>
+      </div>
+
+      <div class="toolbar">
+        <p class="live-pill" id="livePill" data-state="running">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span id="liveLabel">实时监控中</span>
+        </p>
+        <button class="btn btn-primary" id="toggleMonitor" type="button">暂停监控</button>
+        <label class="select-wrap">
+          <span class="sr-only">刷新间隔</span>
+          <select id="intervalSelect" aria-label="刷新间隔"></select>
+        </label>
+        <button class="btn btn-icon" id="openSettings" type="button" aria-label="打开设置" aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="12" cy="12" r="3.2" />
+            <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="hero" data-status="unknown" aria-labelledby="overallTitle">
+        <div class="hero-main">
+          <p class="eyebrow">Status &middot; 实时监控</p>
+          <h1 id="overallTitle">正在检测…</h1>
+          <p class="lead" id="overallLead">Vercel 应用与 Supabase 服务的运行状态</p>
+        </div>
+        <dl class="stats">
+          <div>
+            <dt>应用</dt>
+            <dd id="statApps">—</dd>
+          </div>
+          <div>
+            <dt>平均响应</dt>
+            <dd id="statLatency">—</dd>
+          </div>
+          <div>
+            <dt>在线率</dt>
+            <dd id="statUptime">—</dd>
+          </div>
+          <div>
+            <dt>最后检查</dt>
+            <dd id="statChecked">—</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="section" aria-labelledby="appsHeading">
+        <div class="section-head">
+          <h2 id="appsHeading">应用状态</h2>
+          <p class="section-note">
+            每 <span id="intervalNote">5</span> 秒探测一次 &middot;
+            <button class="link" id="addAppBtn" type="button">添加应用</button>
+          </p>
+        </div>
+        <div class="app-grid" id="appGrid"></div>
+        <p class="empty" id="appsEmpty" hidden>
+          还没有监控中的应用。<button class="link" id="emptyAddApp" type="button">添加一个 Vercel 应用</button>
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="platformHeading">
+        <div class="section-head">
+          <h2 id="platformHeading">平台状态</h2>
+          <p class="section-note">实时取自 Vercel 与 Supabase 官方状态页 &middot; 每 60 秒刷新</p>
+        </div>
+        <div class="platform-grid" id="platformGrid"></div>
+      </section>
+
+      <section class="section" aria-labelledby="eventsHeading">
+        <div class="section-head">
+          <h2 id="eventsHeading">近期事件</h2>
+          <button class="link" id="clearEvents" type="button">清空</button>
+        </div>
+        <ol class="events" id="eventList"></ol>
+        <p class="empty" id="eventsEmpty">暂无事件。状态变化、监控启停与启停操作都会记录在这里。</p>
+      </section>
+
+      <footer class="page-foot">
+        <p>
+          跨域探测只能判断目标是否可达；同源或 Supabase 项目会读取真实 HTTP 状态。
+          配置 Vercel Token 后可直接暂停 / 恢复项目。
+        </p>
+        <p>
+          <a href="https://github.com/lambeta/presentations">lambeta/presentations</a>
+          &middot; 状态数据来自
+          <a href="https://www.vercel-status.com">Vercel</a> 与
+          <a href="https://status.supabase.com">Supabase</a> 官方状态页
+        </p>
+      </footer>
+    </main>
+
+    <div class="scrim" id="scrim" hidden></div>
+
+    <aside class="drawer" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+      <header class="drawer-head">
+        <h2 id="settingsTitle">设置</h2>
+        <button class="btn btn-icon" id="closeSettings" type="button" aria-label="关闭设置">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="drawer-body">
+        <section class="drawer-section">
+          <h3>监控</h3>
+          <label class="field">
+            <span>刷新间隔</span>
+            <select id="settingsInterval" aria-label="刷新间隔"></select>
+          </label>
+        </section>
+
+        <section class="drawer-section">
+          <h3>Vercel（可选）</h3>
+          <p class="field-hint">
+            填入 Token 后，看板可以对真实项目执行暂停 / 恢复。Token 只保存在当前浏览器的
+            localStorage，不会上传到任何服务器。
+            <a href="https://vercel.com/account/tokens" target="_blank" rel="noreferrer noopener">创建 Token &nearr;</a>
+          </p>
+          <label class="field">
+            <span>Token</span>
+            <input id="vercelToken" type="password" autocomplete="off" spellcheck="false" placeholder="可选" />
+          </label>
+          <label class="field">
+            <span>Team ID（可选）</span>
+            <input id="vercelTeam" type="text" autocomplete="off" spellcheck="false" placeholder="team_xxx" />
+          </label>
+        </section>
+
+        <section class="drawer-section">
+          <h3>应用</h3>
+          <ul class="app-config" id="appConfigList"></ul>
+          <form class="add-form" id="addAppForm">
+            <p class="form-title">添加应用</p>
+            <label class="field">
+              <span>名称</span>
+              <input name="name" required maxlength="40" placeholder="Teacher AI" />
+            </label>
+            <label class="field">
+              <span>URL</span>
+              <input name="url" type="url" required placeholder="https://example.vercel.app" />
+            </label>
+            <label class="field">
+              <span>类型</span>
+              <select name="kind">
+                <option value="web">网页应用</option>
+                <option value="supabase">Supabase 项目</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Vercel 项目 ID（可选）</span>
+              <input name="project" autocomplete="off" spellcheck="false" placeholder="prj_xxx" />
+            </label>
+            <button class="btn btn-primary" type="submit">添加</button>
+          </form>
+        </section>
+
+        <section class="drawer-section">
+          <h3>数据</h3>
+          <button class="btn btn-ghost" id="resetBtn" type="button">恢复默认配置</button>
+          <p class="field-hint">配置与历史记录只存在本机浏览器中，清空后不可恢复。</p>
+        </section>
+      </div>
+    </aside>
+
+    <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+
+    <noscript>
+      <p class="noscript">这个页面需要 JavaScript 才能实时检测服务状态。</p>
+    </noscript>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
